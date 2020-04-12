@@ -1,0 +1,34 @@
+﻿  {% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{title}}</h2>
+
+<p>
+    Before we name the query page, we need to characterize it. That is to define ourselves what we want to apply. We go step by step from the simple
+</p>
+
+
+<form method=post>
+    {{ form.csrf }}
+    <table>
+        <tr>
+            <td class="input text"> {{ form.name.label }} </td>
+            <td>                    {{ form.name }}       </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="input submit"> <input type="submit" value="Country"> </td>
+        </tr>
+    </table>
+</form>
+
+<p><h1>Capital of {{Country}} is : <b>{{name}}</b></h1></p>
+
+<h3> Table is </h3>
+{{ raw_data_table | safe}}
+
+
+    {% endblock %}
+
+

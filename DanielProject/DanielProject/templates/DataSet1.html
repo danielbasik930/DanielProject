@@ -1,0 +1,113 @@
+﻿{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h3>{{ message }}</h3>
+
+<p>This Data set is all the best running results for all distances.</p>
+
+<tr>
+    <td>
+        <img src="https://i.ytimg.com/vi/A73HQwEct-o/maxresdefault.jpg" width="300" height="300" />
+    </td>
+</tr>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Explanation of the fields</h2>
+
+    <table>
+        <tr>
+            <td>Place</td>
+            <td>The place that came in the contest</td>
+
+        </tr>
+        <tr>
+            <td>Time</td>
+            <td>The result time</td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>Competitor's name</td>
+        </tr>
+        <tr>
+            <td>Country</td>
+            <td>The country that the competitor represents</td>
+        </tr>
+        <tr>
+            <td>Date of Birth</td>
+            <td>The competitor's birth date</td>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td>where the comptition happen</td>
+        </tr>
+        <tr>
+            <td>Date</td>
+            <td>When the competition occurred</td>
+        </tr>
+        <tr>
+            <td>Gender</td>
+            <td>Men / Women </td>
+        </tr>
+        <tr>
+            <td>Event</td>
+            <td>the distance </td>
+        </tr>
+
+
+
+    </table>
+
+</body>
+</html>
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+<div class="row my-grid-borders">
+    <div class="col-md-5 my-grid-borders">
+        <form method="post">
+            {{ form1.csrf_token }}
+            <input class="btn btn-success" type="submit" name="action" value="Expand">
+        </form>
+    </div>
+    <div class="col-md-5 my-grid-borders">
+        <form method="post">
+            {{ form2.csrf_token }}
+            <input class="btn btn-danger" type="submit" name="action" value="Collapse">
+        </form>
+    </div>
+    <div class="row my-grid-borders">
+        {{ raw_data_table | safe}}
+    </div>
+</div>
+
+
+
+
+{{ raw_data_table | safe}}
+
+
+    {% endblock %}
