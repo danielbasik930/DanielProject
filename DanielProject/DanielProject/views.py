@@ -11,6 +11,11 @@ from DanielProject.Models.LocalDatabaseRoutines import create_LocalDatabaseServi
 from datetime import datetime
 from flask import render_template, redirect, request
 
+import base64
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
@@ -88,33 +93,38 @@ def Album():
 @app.route('/Query', methods=['GET', 'POST'])
 def Query():
 
-    Name = None
-    Country = ''
-    capital = ''
     df = pd.read_csv(path.join(path.dirname(__file__), 'static\\Data\\toprun.csv'))
-    df = df.set_index('Country')
+    
 
-    raw_data_table = df.to_html(classes = 'table table-hover')
 
     form = QueryFormStructure(request.form)
-     
-    if (request.method == 'POST' ):
-        name = form.name.data
-        Country = name
-        if (name in df.index):
-            capital = df.loc[name,'Capital']
-            raw_data_table = ""
-        else:
-            capital = name + ', no such country'
-        form.name.data = ''
+    form.event.choices =[('100 m','100 m'),('200 m','200 m'),('400 m','400 m'),('800 m','800 m'),('1500 m','1500 m'),('5000 m','5000 m'),('10000 m','10000 m'),('Half marathon','Half marathon') ,('Marathon','Marathon')]
+    form.gender.choices =[('Men','Men'),('Women','Women')]
+    chart =''
+    
+    if request.method=='POST':
+        ev = form.event.data
+        gn = form.gender.data
+        print(ev)
+        print(gn)
+        columns = ['Name','City','Place','Date of Birth','Date','Time']
+        df.drop(columns, inplace=True, axis=1)
+        df=df[df['Event']== ev]
+        df=df[df['Gender']== gn]
+        g = df.groupby('Country').size()
+        g = g.sort_values(ascending= False)
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        g.plot(kind='bar', ax = ax)
+        chart = plot_to_img(fig)
+
+
 
 
 
     return render_template('Query.html', 
-            form = form, 
-            name = capital, 
-            Country = Country,
-            raw_data_table = raw_data_table,
+            form = form,
+            chart = chart,
             title='Query by the user',
             year=datetime.now().year,
             message='This page will use the web forms to get user input'
@@ -168,6 +178,8 @@ def Login():
         year=datetime.now().year,
         repository_name='Pandas',
         )
+
+
 
 
 
@@ -232,5 +244,12 @@ def DataSet():
         form1 = form1,
         form2 = form2
     )
+def plot_to_img(fig):
+    pngImage = io.BytesIO()
+    FigureCanvas(fig).print_png(pngImage)
+    pngImageB64String = "data:image/png;base64,"
+    pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
+    return pngImageB64String
+
 
 

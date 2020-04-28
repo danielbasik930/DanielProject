@@ -13,20 +13,24 @@
     {{ form.csrf }}
     <table>
         <tr>
-            <td class="input text"> {{ form.name.label }} </td>
-            <td>                    {{ form.name }}       </td>
+            <td class="input text"> {{ form.event.label }} </td>
+            <td>                    {{ form.event }}       </td>
+        </tr>
+        <tr>
+            <td class="input text"> {{ form.gender.label }} </td>
+            <td>                    {{ form.gender }}       </td>
         </tr>
         <tr>
             <td></td>
-            <td class="input submit"> <input type="submit" value="Country"> </td>
+            <td class="input submit"> <input type="submit" value="RUN"> </td>
+
         </tr>
     </table>
 </form>
 
-<p><h1>Capital of {{Country}} is : <b>{{name}}</b></h1></p>
 
-<h3> Table is </h3>
-{{ raw_data_table | safe}}
+<h3> chart is </h3>
+ <img src={{ chart }} class="img-thumbnail" alt="not found"> 
 
 
     {% endblock %}
