@@ -4,6 +4,7 @@
 
 <h2>{{ title }}</h2>
 
+
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
     {% for message in messages %}
@@ -57,5 +58,7 @@
         </tr>
     </table>
 </form>
+
+<li><a href="{{ url_for('Register') }}">I dont have an acount</a></li>
 
     {% endblock %}

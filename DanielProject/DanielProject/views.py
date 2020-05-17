@@ -48,8 +48,8 @@ from DanielProject.Models.QueryFormStructure import UserRegistrationFormStructur
 db_Functions = create_LocalDatabaseServiceRoutines() 
 SECRET_KEY = 'my super secret key'.encode('utf8')
 
-@app.route('/')
-@app.route('/home')
+
+@app.route('/Home')
 def home():
     """Renders the home page."""
     return render_template(
@@ -65,7 +65,6 @@ def contact():
         'contact.html',
         title='Contact',
         year=datetime.now().year,
-        message=''
     )
 
 @app.route('/about')
@@ -75,7 +74,7 @@ def about():
         'about.html',
         title='',
         year=datetime.now().year,
-        message=''
+        
     )
 
 
@@ -105,8 +104,6 @@ def Query():
     if request.method=='POST':
         ev = form.event.data
         gn = form.gender.data
-        print(ev)
-        print(gn)
         columns = ['Name','City','Place','Date of Birth','Date','Time']
         df.drop(columns, inplace=True, axis=1)
         df=df[df['Event']== ev]
@@ -117,10 +114,6 @@ def Query():
         ax = fig.add_subplot(111)
         g.plot(kind='bar', ax = ax)
         chart = plot_to_img(fig)
-
-
-
-
 
     return render_template('Query.html', 
             form = form,
@@ -143,7 +136,7 @@ def Register():
             db_table = ""
 
             flash('Thanks for registering new user - '+ form.FirstName.data + " " + form.LastName.data )
-            # Here you should put what to do (or were to go) if registration was good
+            return redirect('Query')
         else:
             flash('Error: User with this Username already exist ! - '+ form.username.data)
             form = UserRegistrationFormStructure(request.form)
@@ -160,6 +153,7 @@ def Register():
 # Login page
 # This page is the filter before the data analysis
 # -------------------------------------------------------
+@app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def Login():
     form = LoginFormStructure(request.form)
@@ -167,7 +161,7 @@ def Login():
     if (request.method == 'POST' and form.validate()):
         if (db_Functions.IsLoginGood(form.username.data, form.password.data)):
             flash('Login approved!')
-            #return redirect('<were to go if login is good!')
+            return redirect('Query')
         else:
             flash('Error in - Username and/or password')
    
@@ -190,7 +184,7 @@ def DataModel():
         'DataModel.html',
         title='This is my Data Model page abou top runnig ',
         year=datetime.now().year,
-        message='In this page we will display the datasets we are going to   '
+        message='In this page we will display the datasets we are going to work on   '
     )
 
 
@@ -238,7 +232,7 @@ def DataSet():
 
     return render_template(
         'DataSet.html',
-        title='The Run Results records',
+        title='All the heights of the world',
         year=datetime.now().year ,
         raw_data_table = raw_data_table,
         form1 = form1,
